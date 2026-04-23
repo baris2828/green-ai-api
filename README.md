@@ -1,8 +1,15 @@
 # Green-AI API
 
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
+![Tests: 18 passing](https://img.shields.io/badge/tests-18%20passing-brightgreen)
+![Linting: Ruff](https://img.shields.io/badge/linting-ruff-orange)
+
 **Estimate, compare, and optimize the carbon footprint of your cloud AI workloads.**
 
-Cloud computing accounts for ~1% of global electricity consumption. The carbon intensity varies dramatically between regions — from 15 gCO2eq/kWh (Quebec) to 500+ gCO2eq/kWh (parts of Asia). This API helps teams make data-driven decisions about *where* and *how* to run workloads to minimize their environmental impact.
+Cloud computing accounts for ~1% of global electricity consumption.
+The carbon intensity varies dramatically between regions — from 15 gCO2eq/kWh (Quebec) to 500+ gCO2eq/kWh (parts of Asia).
+This API helps teams make data-driven decisions about *where* and *how* to run workloads to minimize their environmental impact.
 
 ## Architecture
 
@@ -123,6 +130,32 @@ curl -X POST http://localhost:8000/optimize \
   }'
 ```
 
+```json
+{
+  "current_region": "aws-us-east-1",
+  "current_carbon_kg": 14.9324,
+  "recommendations": [
+    {
+      "title": "Migrate to a low-carbon region",
+      "description": "Region 'aws-us-east-1' has 379.0 gCO2eq/kWh. Consider gcp-europe-west6 (25 gCO2eq/kWh).",
+      "estimated_savings_percent": 93.4
+    },
+    {
+      "title": "Right-size your instance",
+      "description": "Utilization is only 20%. Downsizing the instance type can reduce energy waste by ~40%.",
+      "estimated_savings_percent": 40.0
+    },
+    {
+      "title": "Use Cloud Run instead of always-on VMs",
+      "description": "For web-serving workloads, serverless platforms like Cloud Run scale to zero and eliminate standby emissions.",
+      "estimated_savings_percent": 30.0
+    }
+  ],
+  "best_region": "gcp-northamerica-northeast1",
+  "best_region_carbon_kg": 0.5703
+}
+```
+
 ## Development
 
 ### Run Tests
@@ -158,6 +191,18 @@ green-ai-api/
 ├── requirements.txt        # Pinned dependencies
 └── pyproject.toml          # Ruff & pytest configuration
 ```
+
+## Future Roadmap
+
+| Phase | Feature | Description |
+|-------|---------|-------------|
+| v1.1 | **Real-time GCP Billing Integration** | Pull actual cost data via GCP Billing API to correlate carbon savings with dollar savings |
+| v1.1 | **Electricity Maps Live Data** | Replace static carbon intensity values with real-time grid data from the Electricity Maps API |
+| v1.2 | **GPU-aware Estimation** | Fine-grained modeling for A100/H100 workloads with idle vs. training vs. inference power profiles |
+| v1.2 | **Team Dashboard** | Web UI showing cumulative emissions per team, project, or workload over time |
+| v1.3 | **Scheduling Optimizer** | Recommend optimal time windows for batch jobs based on forecasted grid carbon intensity |
+| v1.3 | **Kubernetes Integration** | Sidecar or admission webhook that labels pods with estimated CO2 and suggests node-pool placement |
+| v2.0 | **Multi-cloud Cost-Carbon Pareto** | Joint optimization across AWS, GCP, and Azure factoring in cost, latency, and carbon simultaneously |
 
 ## Carbon Data Sources
 
